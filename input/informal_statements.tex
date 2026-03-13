@@ -1,0 +1,76 @@
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{hyperref}
+\textheight=8.65in
+\textwidth6.65in
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{conjecture}{Conjecture}
+
+\newcommand{\rad}{\operatorname{rad}}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\section{Introduction and statement of results}
+
+Ramanujan's discriminant modular form
+\begin{equation}\label{eq:delta}
+\Delta(z)=q\prod_{n\ge 1}(1-q^n)^{24}=\sum_{n\ge 1}\tau(n)q^n,\qquad (q=e^{2\pi i z}),
+\end{equation}
+is the normalized weight $12$ cusp form on $\mathrm{SL}_2(\mathbb Z)$ with integer Fourier coefficients
+$\tau(n)$ \cite{Ramanujan1916}.
+
+We let
+\begin{equation}
+\mathcal P:=\{\pm \ell:\ \ell \text{ is an odd prime}\}
+\qquad  {\text {and}} \qquad
+\mathcal V:=\{\tau(n):n\ge 1\}.
+\end{equation}
+
+\begin{theorem}\label{thm:main}
+Assuming the $abc$ Conjecture, as $X\rightarrow +\infty$ we have
+$$
+S(X) = O(X^{\frac{9}{10}}\log X).
+$$
+\end{theorem}
+
+\section{The main engine}
+
+\begin{lemma}\label{lem:reduction}
+For the functions
+\begin{displaymath}
+\begin{split}
+E_2(X)&:=\#\{(x,y)\in\mathbb Z_{\ge 1}\times\mathbb Z:\ x> X^{2/11},\ 1\le |x^{11}-y^2|\le X\},\\
+E_4(X)&:=\#\{(x,u)\in\mathbb Z_{\ge 1}\times\mathbb Z:\ x> X^{1/11},\ 1\le |u^2-5x^{22}|\le 4X\},
+\end{split}
+\end{displaymath}
+as $X\rightarrow +\infty$ we have
+\[
+S(X)\ \ll\ X^{9/10}\log X\ +\ X^{13/22}\ +\ X^{6/11}\ +\ E_2(X)\ +\ E_4(X).
+\]
+\end{lemma}
+
+\begin{lemma}\label{lem:main_engine}
+Assuming the $abc$ Conjecture, we have that
+\begin{enumerate}
+\item[(i)] For every $\eta>0$, we have that
+$$E_2(X)\ll_{\eta} X^{4/9+\eta}.
+$$
+\item[(ii)] For every $\eta>0$, we have that
+$$E_4(X)\ll_{\eta} X^{1/5+\eta}.
+$$
+\end{enumerate}
+\end{lemma}
+
+Please note that, ABC conjecture and Xiong's proposition 5.4 should always be assumed when working with the three lemmas.
+
+\end{document}
