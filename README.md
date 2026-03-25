@@ -4,16 +4,16 @@
 
 ## Input files
 
-- `.environment`: specifies the Lean version
-- `task.md`: description of the task to be completed
-- `requirement.md`: specifies the dependencies for the task and instructions on
+- [`.environment`](input/.environment): specifies the Lean version
+- [`task.md`](input/task.md): description of the task to be completed
+- [`requirement.md`](input/requirement.md): specifies the dependencies for the task and instructions on
   how to encode the tau function
-- `*.tex`: TeX files with relevant papers
+- [`*.tex`](input/): TeX files with relevant papers
 
 ## Output files (Run with Lean 4.26.0)
 
-- `RamanujanTauMissesPrimes/problem.lean`: translation of the problem statement into formal language (Lean)
-- `RamanujanTauMissesPrimes/solution.lean`: solution in formal language (Lean)
+- [`RamanujanTauMissesPrimes/problem.lean`](RamanujanTauMissesPrimes/problem.lean): translation of the problem statement into formal language (Lean)
+- [`RamanujanTauMissesPrimes/solution.lean`](RamanujanTauMissesPrimes/solution.lean): solution in formal language (Lean)
 
 ## License
 
