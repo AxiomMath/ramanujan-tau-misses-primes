@@ -2,6 +2,8 @@
 
 # ABC implies that Ramanujan's tau function misses almost all primes
 
+These files accompany the paper [arXiv:2603.29970](https://arxiv.org/abs/2603.29970).
+
 ## Input files
 
 - [`.environment`](input/.environment): specifies the Lean version
