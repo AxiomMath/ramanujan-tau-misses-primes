@@ -51,10 +51,11 @@ def X2k (k : ℕ) : Set ℤ :=
   {z : ℤ | ∃ p : ℕ+, (p : ℕ).Prime ∧ z = R.τ (p ^ (2 * k))}
 
 def Proposition5_4 : Prop :=
-  (∃ c₄ : ℝ, 0 < c₄ ∧
+  (∃ c₄ C₄ : ℝ, 0 < c₄ ∧ 0 < C₄ ∧
     ∀ N : ℝ, c₄ < N →
       ∀ k : ℕ, 3 ≤ k → (k : ℝ) < Real.log N / (2 * Real.log 2) →
-        ((oddPrimesSigned ∩ X2k R k ∩ {z : ℤ | (|z| : ℝ) ≤ N}).ncard : ℝ) < N ^ ((1 : ℝ) / 2)) ∧
+        ((oddPrimesSigned ∩ X2k R k ∩ {z : ℤ | (|z| : ℝ) ≤ N}).ncard : ℝ) ≤
+          C₄ * N ^ ((1 : ℝ) / 2)) ∧
   (∃ c₅ : ℝ, 0 < c₅ ∧
     ∀ N : ℝ, c₅ < N →
       ∀ k : ℕ, (k : ℝ) ≥ Real.log N / (2 * Real.log 2) →
@@ -385,23 +386,23 @@ lemma triple_inter_empty_of_X2k_inter_empty (R : RamanujanTau) (k : ℕ) (X : �
   exact Set.subset_eq_empty Set.inter_subset_right h
 
 lemma per_k_ncard_le_rpow_half (R : RamanujanTau) (h54 : Proposition5_4 R) :
-    ∃ X₀ : ℝ, 0 < X₀ ∧ ∀ X : ℝ, X₀ < X →
+    ∃ C : ℝ, 0 < C ∧ ∃ X₀ : ℝ, 0 < X₀ ∧ ∀ X : ℝ, X₀ < X →
       ∀ k ∈ Finset.Icc 3 ⌊Real.log X / (2 * Real.log 2)⌋₊,
         ((oddPrimesSigned ∩ X2k R k ∩ {z : ℤ | (|z| : ℝ) ≤ X}).ncard : ℝ) ≤
-        X ^ ((1 : ℝ) / 2) := by
-  obtain ⟨⟨c₄, hc₄_pos, hpart1⟩, ⟨c₅, _, hpart2⟩⟩ := h54
-  refine ⟨max c₄ c₅, lt_max_of_lt_left hc₄_pos, ?_⟩
+        C * X ^ ((1 : ℝ) / 2) := by
+  obtain ⟨⟨c₄, C₄, hc₄_pos, hC₄_pos, hpart1⟩, ⟨c₅, _, hpart2⟩⟩ := h54
+  refine ⟨C₄, hC₄_pos, max c₄ c₅, lt_max_of_lt_left hc₄_pos, ?_⟩
   intro X hX_gt k hk_mem
   rw [Finset.mem_Icc] at hk_mem
   obtain ⟨hk_lo, _⟩ := hk_mem
   by_cases hk_lt : (k : ℝ) < Real.log X / (2 * Real.log 2)
   · have hX_gt_c₄ : c₄ < X := lt_of_le_of_lt (le_max_left c₄ c₅) hX_gt
-    exact le_of_lt (hpart1 X hX_gt_c₄ k hk_lo hk_lt)
+    exact hpart1 X hX_gt_c₄ k hk_lo hk_lt
   · have hX_gt_c₅ : c₅ < X := lt_of_le_of_lt (le_max_right c₄ c₅) hX_gt
     push_neg at hk_lt
     have hempty := hpart2 X hX_gt_c₅ k hk_lt
     rw [triple_inter_empty_of_X2k_inter_empty R k X hempty, show ((∅ : Set ℤ).ncard : ℝ) = 0 by simp]
-    exact rpow_half_nonneg (lt_trans (lt_max_of_lt_left hc₄_pos) hX_gt)
+    exact mul_nonneg hC₄_pos.le (rpow_half_nonneg (lt_trans (lt_max_of_lt_left hc₄_pos) hX_gt))
 
 lemma sum_const_le_floor_mul (a : ℝ) (ha : 0 ≤ a) (c : ℝ) (hc : 0 ≤ c) :
     ∑ k ∈ Finset.Icc 3 ⌊a⌋₊, c ≤ a * c := by
@@ -411,12 +412,12 @@ lemma sum_const_le_floor_mul (a : ℝ) (ha : 0 ≤ a) (c : ℝ) (hc : 0 ≤ c) :
   exact mul_le_mul_of_nonneg_right (this.trans (Nat.floor_le ha)) hc
 
 lemma sum_per_k_bound (R : RamanujanTau) (h54 : Proposition5_4 R) :
-    ∃ X₀ : ℝ, 0 < X₀ ∧ ∀ X : ℝ, X₀ < X →
+    ∃ C : ℝ, 0 < C ∧ ∃ X₀ : ℝ, 0 < X₀ ∧ ∀ X : ℝ, X₀ < X →
       ∑ k ∈ Finset.Icc 3 ⌊Real.log X / (2 * Real.log 2)⌋₊,
         ((oddPrimesSigned ∩ X2k R k ∩ {z : ℤ | (|z| : ℝ) ≤ X}).ncard : ℝ) ≤
-      Real.log X / (2 * Real.log 2) * X ^ ((1 : ℝ) / 2) := by
-  obtain ⟨X₀, hX₀_pos, hX₀⟩ := per_k_ncard_le_rpow_half R h54
-  refine ⟨max X₀ 64, lt_max_of_lt_left hX₀_pos, fun X hX => ?_⟩
+      C * (Real.log X / (2 * Real.log 2) * X ^ ((1 : ℝ) / 2)) := by
+  obtain ⟨C, hC_pos, X₀, hX₀_pos, hX₀⟩ := per_k_ncard_le_rpow_half R h54
+  refine ⟨C, hC_pos, max X₀ 64, lt_max_of_lt_left hX₀_pos, fun X hX => ?_⟩
   have hX_gt : X₀ < X := lt_of_le_of_lt (le_max_left X₀ 64) hX
   have hX_64 : 64 < X := lt_of_le_of_lt (le_max_right X₀ 64) hX
   have hX_pos : 0 < X := by linarith
@@ -425,12 +426,13 @@ lemma sum_per_k_bound (R : RamanujanTau) (h54 : Proposition5_4 R) :
   calc ∑ k ∈ Finset.Icc 3 ⌊Real.log X / (2 * Real.log 2)⌋₊,
         ((oddPrimesSigned ∩ X2k R k ∩ {z : ℤ | (|z| : ℝ) ≤ X}).ncard : ℝ)
       ≤ ∑ _ ∈ Finset.Icc 3 ⌊Real.log X / (2 * Real.log 2)⌋₊,
-        X ^ ((1 : ℝ) / 2) :=
+        C * X ^ ((1 : ℝ) / 2) :=
           Finset.sum_le_sum (fun k hk => hX₀ X hX_gt k hk)
-    _ ≤ Real.log X / (2 * Real.log 2) * X ^ ((1 : ℝ) / 2) :=
+    _ ≤ Real.log X / (2 * Real.log 2) * (C * X ^ ((1 : ℝ) / 2)) :=
           sum_const_le_floor_mul (Real.log X / (2 * Real.log 2))
-            ha_nonneg (X ^ ((1 : ℝ) / 2))
-            (rpow_half_nonneg hX_pos)
+            ha_nonneg (C * X ^ ((1 : ℝ) / 2))
+            (mul_nonneg hC_pos.le (rpow_half_nonneg hX_pos))
+    _ = C * (Real.log X / (2 * Real.log 2) * X ^ ((1 : ℝ) / 2)) := by ring
 
 lemma floor_log_ge_three (X : ℝ) (hX : 64 < X) :
     3 ≤ ⌊Real.log X / (2 * Real.log 2)⌋₊ := Nat.le_floor (log_div_two_log_two_gt_three X hX)
@@ -461,17 +463,23 @@ lemma log_div_mul_eq (X : ℝ) (hX : 0 < X) :
       ring_nf
     _ = 1 / (2 * Real.log 2) * (X ^ ((1 : ℝ) / 2) * Real.log X) := by ring
 
-lemma final_arithmetic_bound :
+lemma final_arithmetic_bound (A : ℝ) (hA : 0 < A) :
     ∃ C : ℝ, 0 < C ∧ ∃ X₀ : ℝ, 0 < X₀ ∧ ∀ X : ℝ, X₀ < X →
-      1 + Real.log X / (2 * Real.log 2) * X ^ ((1 : ℝ) / 2) ≤
+      1 + A * (Real.log X / (2 * Real.log 2) * X ^ ((1 : ℝ) / 2)) ≤
       C * (X ^ ((1 : ℝ) / 2) * Real.log X) := by
-  refine ⟨1 + 1 / (2 * Real.log 2),
-    by have : 0 < 1 / (2 * Real.log 2) := div_pos (by norm_num) (by positivity); linarith,
+  refine ⟨1 + A / (2 * Real.log 2),
+    by have : 0 < A / (2 * Real.log 2) := div_pos hA (by positivity); linarith,
     Real.exp 1, Real.exp_pos 1, fun X hX => ?_⟩
   have h1 : 1 ≤ X ^ ((1 : ℝ) / 2) * Real.log X := one_le_sqrt_mul_log X hX
   have hXpos : 0 < X := lt_trans (Real.exp_pos 1) hX
   rw [log_div_mul_eq X hXpos]
-  nlinarith
+  calc
+    1 + A * (1 / (2 * Real.log 2) * (X ^ ((1 : ℝ) / 2) * Real.log X))
+        = 1 + (A / (2 * Real.log 2)) * (X ^ ((1 : ℝ) / 2) * Real.log X) := by ring_nf
+    _ ≤ (X ^ ((1 : ℝ) / 2) * Real.log X) +
+        (A / (2 * Real.log 2)) * (X ^ ((1 : ℝ) / 2) * Real.log X) := by
+          linarith
+    _ = (1 + A / (2 * Real.log 2)) * (X ^ ((1 : ℝ) / 2) * Real.log X) := by ring
 
 lemma k_ge3_contribution (R : RamanujanTau) (h54 : Proposition5_4 R) :
     ∃ C : ℝ, 0 < C ∧ ∃ X₀ : ℝ, 0 < X₀ ∧
@@ -482,8 +490,8 @@ lemma k_ge3_contribution (R : RamanujanTau) (h54 : Proposition5_4 R) :
         C * (X ^ ((1 : ℝ) / 2) * Real.log X) := by
   obtain ⟨h54_1, h54_2⟩ := h54
   obtain ⟨X₁, hX₁_pos, hX₁_vanish⟩ := vanishing_large_k R h54_2
-  obtain ⟨X₂, hX₂_pos, hX₂_sum⟩ := sum_per_k_bound R ⟨h54_1, h54_2⟩
-  obtain ⟨C, hC_pos, X₃, hX₃_pos, hX₃_arith⟩ := final_arithmetic_bound
+  obtain ⟨Csum, hCsum_pos, X₂, hX₂_pos, hX₂_sum⟩ := sum_per_k_bound R ⟨h54_1, h54_2⟩
+  obtain ⟨C, hC_pos, X₃, hX₃_pos, hX₃_arith⟩ := final_arithmetic_bound Csum hCsum_pos
   refine ⟨C, hC_pos, max (max (max X₁ X₂) X₃) 64, by positivity, ?_⟩
   intro X hX
   have hX64 : 64 < X := lt_of_le_of_lt (le_max_right _ (64 : ℝ)) hX
@@ -506,7 +514,7 @@ lemma k_ge3_contribution (R : RamanujanTau) (h54 : Proposition5_4 R) :
             (R.τ (p ^ (2 * k))).natAbs = ℓ}.ncard : ℝ)
       ≤ 1 + ∑ k ∈ Finset.Icc 3 K,
           ((oddPrimesSigned ∩ X2k R k ∩ {z : ℤ | (|z| : ℝ) ≤ X}).ncard : ℝ) := hstep1
-    _ ≤ 1 + Real.log X / (2 * Real.log 2) * X ^ ((1 : ℝ) / 2) := by linarith
+    _ ≤ 1 + Csum * (Real.log X / (2 * Real.log 2) * X ^ ((1 : ℝ) / 2)) := by linarith
     _ ≤ C * (X ^ ((1 : ℝ) / 2) * Real.log X) := hstep3
 
 lemma tau_one_zero_or_one (R : RamanujanTau) : R.τ 1 = 0 ∨ R.τ 1 = 1 := by
