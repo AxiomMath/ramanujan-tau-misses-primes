@@ -119,10 +119,11 @@ def X2k (k : ℕ) : Set ℤ :=
   {z : ℤ | ∃ p : ℕ+, (p : ℕ).Prime ∧ z = R.τ (p ^ (2 * k))}
 
 def Proposition5_4 : Prop :=
-  (∃ c₄ : ℝ, 0 < c₄ ∧
+  (∃ c₄ C₄ : ℝ, 0 < c₄ ∧ 0 < C₄ ∧
     ∀ N : ℝ, c₄ < N →
       ∀ k : ℕ, 3 ≤ k → (k : ℝ) < Real.log N / (2 * Real.log 2) →
-        ((oddPrimesSigned ∩ X2k R k ∩ {z : ℤ | (|z| : ℝ) ≤ N}).ncard : ℝ) < N ^ ((1 : ℝ) / 2)) ∧
+        ((oddPrimesSigned ∩ X2k R k ∩ {z : ℤ | (|z| : ℝ) ≤ N}).ncard : ℝ) ≤
+          C₄ * N ^ ((1 : ℝ) / 2)) ∧
   (∃ c₅ : ℝ, 0 < c₅ ∧
     ∀ N : ℝ, c₅ < N →
       ∀ k : ℕ, (k : ℝ) ≥ Real.log N / (2 * Real.log 2) →
