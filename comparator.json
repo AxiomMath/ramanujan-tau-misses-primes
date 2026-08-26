@@ -1,0 +1,16 @@
+{
+  "challenge_module": "RamanujanTauMissesPrimes.problem",
+  "solution_module": "RamanujanTauMissesPrimes.solution",
+  "theorem_names": [
+    "reduction_lemma",
+    "abc_bound_E2",
+    "abc_bound_E4",
+    "main_theorem"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}
