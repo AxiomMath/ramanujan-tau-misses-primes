@@ -959,6 +959,8 @@ lemma E2_ysq_le_x11_add_X_int_step (X : ℝ) (p : ℕ+ × ℤ)
     (p.2 : ℝ) ^ 2 - ((p.1 : ℕ) : ℝ) ^ 11 ≤ X := by
   have h3' : |((↑↑p.1 : ℝ) ^ 11 - (↑p.2 : ℝ) ^ 2)| ≤ X := by
     convert h3 using 1
+    push_cast
+    ring
   linarith [neg_le_abs ((↑↑p.1 : ℝ) ^ 11 - (↑p.2 : ℝ) ^ 2)]
 
 lemma E2_ysq_le_x11_add_X_helper (X : ℝ) (p : ℕ+ × ℤ)
@@ -2811,7 +2813,7 @@ lemma E4_fiber_ncard_le_four (X : ℝ) (hX : 4 < X) (x : ℕ+)
 lemma E4_fiber_empty_of_le (X : ℝ) (x : ℕ+)
     (hx : ¬((x : ℝ) > X ^ ((1 : ℝ) / 11))) :
     {u : ℤ | (x, u) ∈ E4_set X} = ∅ := by
-  apply Set.eq_empty_of_forall_not_mem
+  apply Set.eq_empty_of_forall_notMem
   intro u hu
   exact hx hu.1
 

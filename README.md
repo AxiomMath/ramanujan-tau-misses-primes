@@ -12,7 +12,7 @@ These files accompany the paper [arXiv:2603.29970](https://arxiv.org/abs/2603.29
   how to encode the tau function
 - [`*.tex`](input/): TeX files with relevant papers
 
-## Output files (Run with Lean 4.26.0)
+## Output files (Run with Lean 4.34.0-rc2)
 
 - [`RamanujanTauMissesPrimes/problem.lean`](RamanujanTauMissesPrimes/problem.lean): translation of the problem statement into formal language (Lean)
 - [`RamanujanTauMissesPrimes/solution.lean`](RamanujanTauMissesPrimes/solution.lean): solution in formal language (Lean)
